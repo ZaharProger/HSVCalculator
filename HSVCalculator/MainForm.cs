@@ -53,11 +53,67 @@ namespace HSVCalculator
             
         }
 
-        //Копирование цвета в буффер
-        private void copyButton_Click(object sender, EventArgs e)
+        //Копирование в буфер обмена HSV
+        private void copyHSVButton_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(color.get);
-            MessageBox.Show("Данные о цвете скопированы в буфер обмена!");
+            Clipboard.SetText(color.getHue() + " " + color.getSaturation() + " " + color.getBrightness());
+            MessageBox.Show("Данные о цвете успешно скопированы в буфер обмена!");
+        }
+
+        //Копирование в буфер обмена RGB
+        private void copyRGBButton_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(color.getRed() + " " + color.getGreen() + " " + color.getBlue());
+            MessageBox.Show("Данные о цвете успешно скопированы в буфер обмена!");
+        }
+
+        //Установка параметра hue
+        private void hueSetter_Scroll(object sender, EventArgs e)
+        {
+            color.setHue(hueSetter.Value);
+            hueValue.Text = color.getHue().ToString();
+        }
+
+        //Установка параметра saturation
+        private void saturationSetter_Scroll(object sender, EventArgs e)
+        {
+            color.setSaturation(saturationSetter.Value);
+            saturationValue.Text = color.getSaturation().ToString();
+        }
+
+        //Установка параметра brightness
+        private void brightnessSetter_Scroll(object sender, EventArgs e)
+        {
+            color.setBrightness(brightnessSetter.Value);
+            brightnessValue.Text = color.getBrightness().ToString();
+        }
+
+        //Установка красного цвета
+        private void redSetter_Scroll(object sender, EventArgs e)
+        {
+            color.setRed(redSetter.Value);
+            redValue.Text = color.getRed().ToString();
+        }
+
+        //Установка зеленого цвета
+        private void greenSetter_Scroll(object sender, EventArgs e)
+        {
+            color.setGreen(greenSetter.Value);
+            greenValue.Text = color.getGreen().ToString();
+        }
+
+        //Установка синего цвета
+        private void blueSetter_Scroll(object sender, EventArgs e)
+        {
+            color.setBlue(blueSetter.Value);
+            blueValue.Text = color.getBlue().ToString();
+        }
+
+        //Визуализация цвета
+        private void colorVisualisation_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics drawer = e.Graphics;
+            drawer.FillRectangle(Brushes., colorVisualisation.Left, colorVisualisation.Top, colorVisualisation.Right, colorVisualisation.Bottom);
         }
     }
 }

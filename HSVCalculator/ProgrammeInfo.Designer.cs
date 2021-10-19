@@ -53,7 +53,8 @@ namespace HSVCalculator
             this.Controls.Add(this.label1);
             this.KeyPreview = true;
             this.Name = "ProgrammeInfo";
-            this.Text = "ProgrammeInfo";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "О программе";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProgrammeInfo_FormClosed);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ProgrammeInfo_KeyDown);
             this.ResumeLayout(false);
