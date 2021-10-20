@@ -56,14 +56,14 @@ namespace HSVCalculator
         //Копирование в буфер обмена HSV
         private void copyHSVButton_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(color.getHue() + " " + color.getSaturation() + " " + color.getBrightness());
+            Clipboard.SetText((int)color.getHue() + " " + (int)color.getSaturation() + " " + (int)color.getBrightness());
             MessageBox.Show("Данные о цвете успешно скопированы в буфер обмена!");
         }
 
         //Копирование в буфер обмена RGB
         private void copyRGBButton_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(color.getRed() + " " + color.getGreen() + " " + color.getBlue());
+            Clipboard.SetText((int)color.getRed() + " " + (int)color.getGreen() + " " + (int)color.getBlue());
             MessageBox.Show("Данные о цвете успешно скопированы в буфер обмена!");
         }
 
@@ -135,15 +135,21 @@ namespace HSVCalculator
         private void updateTrackBarRGB()
         {
             redSetter.Value = (int)color.getRed();
+            redValue.Text = ((int)color.getRed()).ToString();
             greenSetter.Value = (int)color.getGreen();
+            greenValue.Text = ((int)color.getGreen()).ToString();
             blueSetter.Value = (int)color.getBlue();
+            blueValue.Text = ((int)color.getBlue()).ToString();
         }
 
         private void updateTrackBarHSV()
         {
             hueSetter.Value = (int)color.getHue();
+            hueValue.Text = ((int)color.getHue()).ToString();
             saturationSetter.Value = (int)color.getSaturation();
+            saturationValue.Text = ((int)color.getSaturation()).ToString();
             brightnessSetter.Value = (int)color.getBrightness();
+            brightnessValue.Text = ((int)color.getBrightness()).ToString();
         }
     }
 }

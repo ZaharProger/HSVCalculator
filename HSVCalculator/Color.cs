@@ -102,85 +102,93 @@ namespace HSVCalculator
 
         public void ConvertToRGB()
         {
-            double hueRemainder = hsv.hue / 60 % 6;
-            double brightnessMin = ((100 - hsv.saturation) * hsv.brightness) / 100;
-            double delta = (hsv.brightness - brightnessMin) * (hsv.hue % 60 / 60);
-            double brightnessInc = brightnessMin + delta;
-            double brightnessDec = hsv.brightness - delta;
-            switch (hueRemainder)
+            double chroma = hsv.brightness / 100 * hsv.saturation / 100;
+            double x = chroma * (1 - Math.Abs(hsv.hue / 60 % 2 - 1));
+            double delta = hsv.brightness / 100 - chroma;
+
+            if (hsv.hue >= 0 && hsv.hue < 60)
             {
-                case 0:
-                    rgb.red = hsv.brightness;
-                    rgb.green = brightnessInc;
-                    rgb.blue = brightnessMin;
-                    break;
-                case 1:
-                    rgb.red = brightnessDec;
-                    rgb.green = hsv.brightness;
-                    rgb.blue = brightnessMin;
-                    break;
-                case 2:
-                    rgb.red = brightnessMin;
-                    rgb.green = hsv.brightness;
-                    rgb.blue = brightnessInc;
-                    break;
-                case 3:
-                    rgb.red = brightnessMin;
-                    rgb.green = brightnessDec;
-                    rgb.blue = hsv.brightness;
-                    break;
-                case 4:
-                    rgb.red = brightnessInc;
-                    rgb.green = brightnessMin;
-                    rgb.blue = hsv.brightness;
-                    break;
-                case 5:
-                    rgb.red = hsv.brightness;
-                    rgb.green = brightnessMin;
-                    rgb.blue = brightnessDec;
-                    break;
+                rgb.red = chroma;
+                rgb.green = x;
+                rgb.blue = 0;
+            }
+            else if (hsv.hue >= 60 && hsv.hue < 120)
+            {
+                rgb.red = x;
+                rgb.green = chroma;
+                rgb.blue = 0;
+            }
+            else if (hsv.hue >= 120 && hsv.hue < 180)
+            {
+                rgb.red = 0;
+                rgb.green = chroma;
+                rgb.blue = x;
+            }
+            else if (hsv.hue >= 180 && hsv.hue < 240)
+            {
+                rgb.red = 0;
+                rgb.green = x;
+                rgb.blue = chroma;
+            }
+            else if (hsv.hue >= 240 && hsv.hue < 300)
+            {
+                rgb.red = x;
+                rgb.green = 0;
+                rgb.blue = chroma;
+            }
+            else if (hsv.hue >= 300 && hsv.hue < 360)
+            {
+                rgb.red = chroma;
+                rgb.green = 0;
+                rgb.blue = x;
             }
 
-            rgb.red *= 2.55;
-            rgb.green *= 2.55;
-            rgb.blue *= 2.55;
+            rgb.red += delta;
+            rgb.green += delta;
+            rgb.blue += delta;
+
+            rgb.red *= 255;
+            rgb.green *= 255;
+            rgb.blue *= 255;
+
+            rgb.red = Math.Round(rgb.red);
+            rgb.green = Math.Round(rgb.green);
+            rgb.blue = Math.Round(rgb.blue);
         }
 
         public void ConvertToHSV()
         {
-            double max = 0;
-            double min = 0;
-            if (rgb.red % 1 > rgb.green % 1 && rgb.red % 1 > rgb.blue % 1)
-                max = rgb.red;
-            else if (rgb.green % 1 > rgb.red % 1 && rgb.green % 1 > rgb.blue % 1)
-                max = rgb.green;
-            else if (rgb.blue % 1 > rgb.green % 1 && rgb.blue % 1 > rgb.red % 1)
-                max = rgb.blue;
-            if (rgb.red % 1 < rgb.green % 1 && rgb.red % 1 < rgb.blue % 1)
-                min = rgb.red;
-            else if (rgb.green % 1 < rgb.red % 1 && rgb.green % 1 < rgb.blue % 1)
-                min = rgb.green;
-            else if (rgb.blue % 1 < rgb.green % 1 && rgb.blue % 1 < rgb.red % 1)
-                min = rgb.blue;
+            double max = Math.Max(Math.Max(rgb.red / 255, rgb.green / 255), rgb.blue / 255);
+            double min = Math.Min(Math.Min(rgb.red / 255, rgb.green / 255), rgb.blue / 255);
+            double delta = max - min;
 
-            if (max != min)
+            if (delta != 0)
             {
-                if (max == rgb.red && rgb.green >= rgb.blue)
-                    hsv.hue = 60 * ((rgb.green - rgb.blue) / (max - min));
-                else if (max == rgb.red && rgb.green < rgb.blue)
-                    hsv.hue = 60 * ((rgb.green - rgb.blue) / (max - min)) + 360;
-                else if (max == rgb.green)
-                    hsv.hue = 60 * ((rgb.blue - rgb.red) / (max - min)) + 120;
-                else if (max == rgb.blue)
-                    hsv.hue = 60 * ((rgb.red - rgb.green) / (max - min)) + 240;
+                if (max == rgb.red / 255)
+                    hsv.hue = 60 * ((rgb.green / 255 - rgb.blue / 255) / delta % 6);
+                else if (max == rgb.green / 255)
+                    hsv.hue = 60 * (((rgb.blue / 255 - rgb.red / 255) / delta) + 2);
+                else if (max == rgb.blue / 255)
+                    hsv.hue = 60 * (((rgb.red / 255 - rgb.green / 255) / delta) + 4);
 
-                if (max == 0)
-                    hsv.saturation = 0;
+                if (max != 0)
+                    hsv.saturation = delta / max * 100;
                 else
-                    hsv.saturation = 1 - (min / max);
-
-                hsv.brightness = max;
+                    hsv.saturation = 0;               
             }
-        }
+            else
+            {
+                hsv.hue = 0;
+                hsv.saturation = 0;
+            }
+            hsv.brightness = max * 100;
+
+            if (hsv.hue < 0)
+                hsv.hue += 360;
+
+            hsv.hue = Math.Round(hsv.hue);
+            hsv.saturation = Math.Round(hsv.saturation);
+            hsv.brightness = Math.Round(hsv.brightness);
+        }      
     }
 }
