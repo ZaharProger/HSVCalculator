@@ -71,7 +71,10 @@ namespace HSVCalculator
         private void hueSetter_Scroll(object sender, EventArgs e)
         {
             color.setHue(hueSetter.Value);
-            hueValue.Text = color.getHue().ToString();
+            hueValue.Text = color.getHue().ToString();         
+            color.ConvertToRGB();
+            updateTrackBarRGB();
+            updateColor();
         }
 
         //Установка параметра saturation
@@ -79,6 +82,9 @@ namespace HSVCalculator
         {
             color.setSaturation(saturationSetter.Value);
             saturationValue.Text = color.getSaturation().ToString();
+            color.ConvertToRGB();
+            updateTrackBarRGB();
+            updateColor();
         }
 
         //Установка параметра brightness
@@ -86,6 +92,9 @@ namespace HSVCalculator
         {
             color.setBrightness(brightnessSetter.Value);
             brightnessValue.Text = color.getBrightness().ToString();
+            color.ConvertToRGB();
+            updateTrackBarRGB();
+            updateColor();
         }
 
         //Установка красного цвета
@@ -93,6 +102,9 @@ namespace HSVCalculator
         {
             color.setRed(redSetter.Value);
             redValue.Text = color.getRed().ToString();
+            color.ConvertToHSV();
+            updateTrackBarHSV();
+            updateColor();
         }
 
         //Установка зеленого цвета
@@ -100,6 +112,9 @@ namespace HSVCalculator
         {
             color.setGreen(greenSetter.Value);
             greenValue.Text = color.getGreen().ToString();
+            color.ConvertToHSV();
+            updateTrackBarHSV();
+            updateColor();
         }
 
         //Установка синего цвета
@@ -107,13 +122,28 @@ namespace HSVCalculator
         {
             color.setBlue(blueSetter.Value);
             blueValue.Text = color.getBlue().ToString();
+            color.ConvertToHSV();
+            updateTrackBarHSV();
+            updateColor();
         }
 
-        //Визуализация цвета
-        private void colorVisualisation_Paint(object sender, PaintEventArgs e)
+        private void updateColor()
         {
-            Graphics drawer = e.Graphics;
-            drawer.FillRectangle(Brushes., colorVisualisation.Left, colorVisualisation.Top, colorVisualisation.Right, colorVisualisation.Bottom);
+            colorVisualisation.BackColor = System.Drawing.Color.FromArgb((int)color.getRed(), (int)color.getGreen(), (int)color.getBlue());
+        }
+
+        private void updateTrackBarRGB()
+        {
+            redSetter.Value = (int)color.getRed();
+            greenSetter.Value = (int)color.getGreen();
+            blueSetter.Value = (int)color.getBlue();
+        }
+
+        private void updateTrackBarHSV()
+        {
+            hueSetter.Value = (int)color.getHue();
+            saturationSetter.Value = (int)color.getSaturation();
+            brightnessSetter.Value = (int)color.getBrightness();
         }
     }
 }

@@ -304,7 +304,6 @@ namespace HSVCalculator
             this.colorVisualisation.Size = new System.Drawing.Size(161, 223);
             this.colorVisualisation.TabIndex = 21;
             this.colorVisualisation.TabStop = false;
-            this.colorVisualisation.Paint += new System.Windows.Forms.PaintEventHandler(this.colorVisualisation_Paint);
             // 
             // MainForm
             // 
