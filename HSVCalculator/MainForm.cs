@@ -127,11 +127,13 @@ namespace HSVCalculator
             updateColor();
         }
 
+        //Визуализация цвета
         private void updateColor()
         {
             colorVisualisation.BackColor = System.Drawing.Color.FromArgb((int)color.getRed(), (int)color.getGreen(), (int)color.getBlue());
         }
 
+        //Синхронизация каналов RGB
         private void updateTrackBarRGB()
         {
             redSetter.Value = (int)color.getRed();
@@ -142,6 +144,7 @@ namespace HSVCalculator
             blueValue.Text = ((int)color.getBlue()).ToString();
         }
 
+        //Синхронизация каналов HSV
         private void updateTrackBarHSV()
         {
             hueSetter.Value = (int)color.getHue();
