@@ -337,6 +337,7 @@ namespace HSVCalculator
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HSV/RGB calculator";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.hueSetter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.saturationSetter)).EndInit();

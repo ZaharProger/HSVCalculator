@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HSVCalculator
 {
-    class HSV : Convertable<RGB>
+    public class HSV : Convertable<RGB>
     {
         private double hue;
         private double saturation;
@@ -17,6 +17,13 @@ namespace HSVCalculator
             hue = 0;
             saturation = 0;
             brightness = 0;
+        }
+
+        public HSV(double hue, double saturation, double brightness)
+        {
+            this.hue = hue;
+            this.saturation = saturation;
+            this.brightness = brightness;
         }
 
         public void SetHue(double value)
