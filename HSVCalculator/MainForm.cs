@@ -12,11 +12,9 @@ namespace HSVCalculator
 {
     public partial class MainForm : Form
     {
-        private Color color;
         public MainForm()
         {
             InitializeComponent();
-            color = new Color();
 
             hueSetter.Value = 0;
             hueSetter.SetRange(0, 360);
@@ -56,103 +54,109 @@ namespace HSVCalculator
         //Копирование в буфер обмена HSV
         private void copyHSVButton_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText((int)color.getHue() + " " + (int)color.getSaturation() + " " + (int)color.getBrightness());
+            Clipboard.SetText(hueSetter.Value + " " + saturationSetter.Value + " " + brightnessSetter.Value);
             MessageBox.Show("Данные о цвете успешно скопированы в буфер обмена!");
         }
 
         //Копирование в буфер обмена RGB
         private void copyRGBButton_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText((int)color.getRed() + " " + (int)color.getGreen() + " " + (int)color.getBlue());
+            Clipboard.SetText(redSetter.Value + " " + greenSetter.Value + " " + blueSetter.Value);
             MessageBox.Show("Данные о цвете успешно скопированы в буфер обмена!");
         }
 
         //Установка параметра hue
         private void hueSetter_Scroll(object sender, EventArgs e)
         {
-            color.setHue(hueSetter.Value);
-            hueValue.Text = color.getHue().ToString();         
-            color.ConvertToRGB();
-            updateTrackBarRGB();
-            updateColor();
+            HSV hsv = new HSV();
+            hsv.SetHue(hueSetter.Value);
+            hueValue.Text = hsv.GetHue().ToString();         
+            RGB rgb = hsv.Convert();
+            updateTrackBarRGB(rgb);
+            updateColor(rgb.GetRed(), rgb.GetGreen(), rgb.GetBlue());
         }
 
         //Установка параметра saturation
         private void saturationSetter_Scroll(object sender, EventArgs e)
         {
-            color.setSaturation(saturationSetter.Value);
-            saturationValue.Text = color.getSaturation().ToString();
-            color.ConvertToRGB();
-            updateTrackBarRGB();
-            updateColor();
+            HSV hsv = new HSV();
+            hsv.SetSaturation(saturationSetter.Value);
+            saturationValue.Text = hsv.GetSaturation().ToString();
+            RGB rgb = hsv.Convert();
+            updateTrackBarRGB(rgb);
+            updateColor(rgb.GetRed(), rgb.GetGreen(), rgb.GetBlue());
         }
 
         //Установка параметра brightness
         private void brightnessSetter_Scroll(object sender, EventArgs e)
         {
-            color.setBrightness(brightnessSetter.Value);
-            brightnessValue.Text = color.getBrightness().ToString();
-            color.ConvertToRGB();
-            updateTrackBarRGB();
-            updateColor();
+            HSV hsv = new HSV();
+            hsv.SetBrightness(brightnessSetter.Value);
+            brightnessValue.Text = hsv.GetBrightness().ToString();
+            RGB rgb = hsv.Convert();
+            updateTrackBarRGB(rgb);
+            updateColor(rgb.GetRed(), rgb.GetGreen(), rgb.GetBlue());
         }
 
         //Установка красного цвета
         private void redSetter_Scroll(object sender, EventArgs e)
         {
-            color.setRed(redSetter.Value);
-            redValue.Text = color.getRed().ToString();
-            color.ConvertToHSV();
-            updateTrackBarHSV();
-            updateColor();
+            RGB rgb = new RGB();
+            rgb.SetRed(redSetter.Value);
+            redValue.Text = rgb.GetRed().ToString();
+            HSV hsv = rgb.Convert();
+            updateTrackBarHSV(hsv);
+            updateColor(hsv.GetHue(), hsv.GetSaturation(), hsv.GetBrightness());
         }
 
         //Установка зеленого цвета
         private void greenSetter_Scroll(object sender, EventArgs e)
         {
-            color.setGreen(greenSetter.Value);
-            greenValue.Text = color.getGreen().ToString();
-            color.ConvertToHSV();
-            updateTrackBarHSV();
-            updateColor();
+            RGB rgb = new RGB();
+            rgb.SetGreen(greenSetter.Value);
+            greenValue.Text = rgb.GetGreen().ToString();
+            HSV hsv = rgb.Convert();
+            updateTrackBarHSV(hsv);
+            updateColor(hsv.GetHue(), hsv.GetSaturation(), hsv.GetBrightness());
         }
 
         //Установка синего цвета
         private void blueSetter_Scroll(object sender, EventArgs e)
         {
-            color.setBlue(blueSetter.Value);
-            blueValue.Text = color.getBlue().ToString();
-            color.ConvertToHSV();
-            updateTrackBarHSV();
-            updateColor();
+            RGB rgb = new RGB();
+            rgb.SetBlue(blueSetter.Value);
+            blueValue.Text = rgb.GetBlue().ToString();
+            HSV hsv = rgb.Convert();
+            updateTrackBarHSV(hsv);
+            updateColor(hsv.GetHue(), hsv.GetSaturation(), hsv.GetBrightness());
         }
 
         //Визуализация цвета
-        private void updateColor()
+        private void updateColor(double red, double green, double blue)
         {
-            colorVisualisation.BackColor = System.Drawing.Color.FromArgb((int)color.getRed(), (int)color.getGreen(), (int)color.getBlue());
+            colorVisualisation.BackColor = Color.FromArgb((int)red, (int)green, (int)blue);
         }
 
         //Синхронизация каналов RGB
-        private void updateTrackBarRGB()
+        private void updateTrackBarRGB(RGB rgb)
         {
-            redSetter.Value = (int)color.getRed();
-            redValue.Text = ((int)color.getRed()).ToString();
-            greenSetter.Value = (int)color.getGreen();
-            greenValue.Text = ((int)color.getGreen()).ToString();
-            blueSetter.Value = (int)color.getBlue();
-            blueValue.Text = ((int)color.getBlue()).ToString();
+            redSetter.Value = (int)rgb.GetRed();
+            redValue.Text = ((int)rgb.GetRed()).ToString();
+            greenSetter.Value = (int)rgb.GetGreen();
+            greenValue.Text = ((int)rgb.GetGreen()).ToString();
+            blueSetter.Value = (int)rgb.GetBlue();
+            blueValue.Text = ((int)rgb.GetBlue()).ToString();
         }
 
         //Синхронизация каналов HSV
-        private void updateTrackBarHSV()
+        private void updateTrackBarHSV(HSV hsv)
         {
-            hueSetter.Value = (int)color.getHue();
-            hueValue.Text = ((int)color.getHue()).ToString();
-            saturationSetter.Value = (int)color.getSaturation();
-            saturationValue.Text = ((int)color.getSaturation()).ToString();
-            brightnessSetter.Value = (int)color.getBrightness();
-            brightnessValue.Text = ((int)color.getBrightness()).ToString();
+            hueSetter.Value = (int)hsv.GetHue();
+            hueValue.Text = ((int)hsv.GetHue()).ToString();
+            saturationSetter.Value = (int)hsv.GetSaturation();
+            saturationValue.Text = ((int)hsv.GetSaturation()).ToString();
+            brightnessSetter.Value = (int)hsv.GetBrightness();
+            brightnessValue.Text = ((int)hsv.GetBrightness()).ToString();
         }
     }
 }
