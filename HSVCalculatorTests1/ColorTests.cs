@@ -24,18 +24,27 @@ namespace HSVCalculator.Tests
                 new RGB(0, 0, 0), new RGB(255, 255, 255), new RGB(255, 0 ,0),
                 new RGB(255, 0, 255), new RGB(128, 128, 0), new RGB(128, 0, 0)
             };
-            short k = 0;
+            List<RGB> convertedHSV = new List<RGB>();
+            List<HSV> convertedRGB = new List<HSV>();
+
             for (int i = 0; i < testHSV.Count; ++i)
             {
-                RGB convertedHSV = testHSV[i].Convert();
-                HSV convertedRGB = testRGB[i].Convert();
-                if (testRGB[i].GetRed() == convertedHSV.GetRed() && testRGB[i].GetGreen() == convertedHSV.GetGreen() && testRGB[i].GetBlue() == convertedHSV.GetBlue())
-                    ++k;
-                if (testHSV[i].GetHue() == convertedRGB.GetHue() && testHSV[i].GetSaturation() == convertedRGB.GetSaturation() && testHSV[i].GetBrightness() == convertedRGB.GetBrightness())
-                    ++k;
+                convertedHSV.Add(testHSV[i].Convert());
+                convertedRGB.Add(testRGB[i].Convert());
             }
-            
-            Assert.AreEqual(12, k);
+
+            for (int i = 0; i < convertedRGB.Count; ++i)
+            {
+                Assert.AreEqual(testHSV[i].GetHue(), convertedRGB[i].GetHue());
+                Assert.AreEqual(testHSV[i].GetSaturation(), convertedRGB[i].GetSaturation());
+                Assert.AreEqual(testHSV[i].GetBrightness(), convertedRGB[i].GetBrightness());
+            }
+            for (int i = 0; i < convertedHSV.Count; ++i)
+            {
+                Assert.AreEqual(testRGB[i].GetRed(), convertedHSV[i].GetRed());
+                Assert.AreEqual(testRGB[i].GetGreen(), convertedHSV[i].GetGreen());
+                Assert.AreEqual(testRGB[i].GetBlue(), convertedHSV[i].GetBlue());
+            }
         }
     }
 }
